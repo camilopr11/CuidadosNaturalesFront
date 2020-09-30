@@ -15,15 +15,15 @@ import com.bumptech.glide.request.RequestOptions;
 import com.bumptech.glide.Glide;
 import com.kadrez.cuidadosnaturales.AlertListActivity;
 import com.kadrez.cuidadosnaturales.Models.Alert;
-import com.kadrez.cuidadosnaturales.R ;
+import com.kadrez.cuidadosnaturales.R;
 
 import java.util.List;
 
 
 public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapter.MyViewHolder> {
 
-    private Context mContext ;
-    private List<Alert> mData ;
+    private Context mContext;
+    private List<Alert> mData;
     RequestOptions option;
 
 
@@ -39,26 +39,24 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
     @Override
     public MyViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
 
-        View view ;
+        View view;
         LayoutInflater inflater = LayoutInflater.from(mContext);
-        view = inflater.inflate(R.layout.alert_list_items,parent,false) ;
-        final MyViewHolder viewHolder = new MyViewHolder(view) ;
+        view = inflater.inflate(R.layout.alert_list_items, parent, false);
+        final MyViewHolder viewHolder = new MyViewHolder(view);
         viewHolder.view_container.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
 
                 Intent i = new Intent(mContext, AlertListActivity.class);
-                i.putExtra("plant_name",mData.get(viewHolder.getAdapterPosition()).getName());
-                i.putExtra("alert_type",mData.get(viewHolder.getAdapterPosition()).getAlertType());
-                i.putExtra("date",mData.get(viewHolder.getAdapterPosition()).getDate());
-                i.putExtra("plant_img",mData.get(viewHolder.getAdapterPosition()).getImage_url());
+                i.putExtra("plant_name", mData.get(viewHolder.getAdapterPosition()).getName());
+                i.putExtra("alert_type", mData.get(viewHolder.getAdapterPosition()).getAlertType());
+                i.putExtra("date", mData.get(viewHolder.getAdapterPosition()).getDate());
+                i.putExtra("plant_img", mData.get(viewHolder.getAdapterPosition()).getImage_url());
 
                 mContext.startActivity(i);
 
             }
         });
-
-
 
 
         return viewHolder;
@@ -76,7 +74,6 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
         Glide.with(mContext).load(mData.get(position).getImage_url()).apply(option).into(holder.img_thumbnail);
 
 
-
     }
 
     @Override
@@ -86,14 +83,11 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
 
     public static class MyViewHolder extends RecyclerView.ViewHolder {
 
-        TextView tv_name ;
-        TextView tv_type ;
-        TextView tv_date ;
+        TextView tv_name;
+        TextView tv_type;
+        TextView tv_date;
         ImageView img_thumbnail;
         LinearLayout view_container;
-
-
-
 
 
         public MyViewHolder(View itemView) {

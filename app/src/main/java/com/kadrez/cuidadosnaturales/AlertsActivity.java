@@ -101,7 +101,7 @@ public class AlertsActivity extends AppCompatActivity {
                     e.printStackTrace();
                 }
                 img = img_ET.getText().toString();
-                if(validate(view)) {
+                if (validate(view)) {
                     registerUser(view);
                 }
             }
@@ -109,31 +109,31 @@ public class AlertsActivity extends AppCompatActivity {
     }
 
     private void showDateTimeDialog(final EditText date_time_in) {
-        final Calendar calendar=Calendar.getInstance();
-        DatePickerDialog.OnDateSetListener dateSetListener=new DatePickerDialog.OnDateSetListener() {
+        final Calendar calendar = Calendar.getInstance();
+        DatePickerDialog.OnDateSetListener dateSetListener = new DatePickerDialog.OnDateSetListener() {
             @Override
             public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
-                calendar.set(Calendar.YEAR,year);
-                calendar.set(Calendar.MONTH,month);
-                calendar.set(Calendar.DAY_OF_MONTH,dayOfMonth);
+                calendar.set(Calendar.YEAR, year);
+                calendar.set(Calendar.MONTH, month);
+                calendar.set(Calendar.DAY_OF_MONTH, dayOfMonth);
 
-                TimePickerDialog.OnTimeSetListener timeSetListener=new TimePickerDialog.OnTimeSetListener() {
+                TimePickerDialog.OnTimeSetListener timeSetListener = new TimePickerDialog.OnTimeSetListener() {
                     @Override
                     public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
-                        calendar.set(Calendar.HOUR_OF_DAY,hourOfDay);
-                        calendar.set(Calendar.MINUTE,minute);
+                        calendar.set(Calendar.HOUR_OF_DAY, hourOfDay);
+                        calendar.set(Calendar.MINUTE, minute);
 
-                        SimpleDateFormat simpleDateFormat=new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'");
+                        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'");
 
                         date_time_in.setText(simpleDateFormat.format(calendar.getTime()));
                     }
                 };
 
-                new TimePickerDialog(AlertsActivity.this,timeSetListener,calendar.get(Calendar.HOUR_OF_DAY),calendar.get(Calendar.MINUTE),false).show();
+                new TimePickerDialog(AlertsActivity.this, timeSetListener, calendar.get(Calendar.HOUR_OF_DAY), calendar.get(Calendar.MINUTE), false).show();
             }
         };
 
-        new DatePickerDialog(AlertsActivity.this,dateSetListener,calendar.get(Calendar.YEAR),calendar.get(Calendar.MONTH),calendar.get(Calendar.DAY_OF_MONTH)).show();
+        new DatePickerDialog(AlertsActivity.this, dateSetListener, calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH), calendar.get(Calendar.DAY_OF_MONTH)).show();
 
     }
 
@@ -154,7 +154,7 @@ public class AlertsActivity extends AppCompatActivity {
             @Override
             public void onResponse(JSONObject response) {
                 try {
-                    if(response.getBoolean("success")) {
+                    if (response.getBoolean("success")) {
                         Toast.makeText(AlertsActivity.this, "Alert added successfully", Toast.LENGTH_SHORT).show();
                         startActivity(new Intent(AlertsActivity.this, MainActivity.class));
                         progressBar.setVisibility(View.GONE);
@@ -168,9 +168,9 @@ public class AlertsActivity extends AppCompatActivity {
             public void onErrorResponse(VolleyError error) {
 
                 NetworkResponse response = error.networkResponse;
-                if(error instanceof ServerError && response != null) {
+                if (error instanceof ServerError && response != null) {
                     try {
-                        String res = new String(response.data, HttpHeaderParser.parseCharset(response.headers,  "utf-8"));
+                        String res = new String(response.data, HttpHeaderParser.parseCharset(response.headers, "utf-8"));
 
                         JSONObject obj = new JSONObject(res);
                         Toast.makeText(AlertsActivity.this, obj.getString("msg"), Toast.LENGTH_SHORT).show();
@@ -205,29 +205,29 @@ public class AlertsActivity extends AppCompatActivity {
     public boolean validate(View view) {
         boolean isValid;
 
-        if(!TextUtils.isEmpty(name)) {
-            if(!TextUtils.equals(type, "Select alert type")) {
-                if(!TextUtils.isEmpty(dateStr)) {
-                    if(!TextUtils.isEmpty(img)) {
+        if (!TextUtils.isEmpty(name)) {
+            if (!TextUtils.equals(type, "Select alert type")) {
+                if (!TextUtils.isEmpty(dateStr)) {
+                    if (!TextUtils.isEmpty(img)) {
                         isValid = true;
                     } else {
-                        utilService.showSnackBar(view,"please enter image url....");
+                        utilService.showSnackBar(view, "please enter image url....");
                         isValid = false;
                     }
                 } else {
-                    utilService.showSnackBar(view,"please enter date....");
+                    utilService.showSnackBar(view, "please enter date....");
                     isValid = false;
                 }
             } else {
-                utilService.showSnackBar(view,"please enter type....");
+                utilService.showSnackBar(view, "please enter type....");
                 isValid = false;
             }
         } else {
-            utilService.showSnackBar(view,"please enter name....");
+            utilService.showSnackBar(view, "please enter name....");
             isValid = false;
         }
 
-        return  isValid;
+        return isValid;
     }
 
 }

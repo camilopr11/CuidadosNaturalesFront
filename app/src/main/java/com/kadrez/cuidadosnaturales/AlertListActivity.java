@@ -30,7 +30,6 @@ import com.android.volley.toolbox.HttpHeaderParser;
 import com.android.volley.toolbox.JsonArrayRequest;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
-import com.codewithajit.todoapp.UtilsService.SharedPreferenceClass;
 import com.kadrez.cuidadosnaturales.Adapters.RecyclerViewAdapter;
 import com.kadrez.cuidadosnaturales.UtilsService.UtilService;
 
@@ -47,7 +46,9 @@ import java.util.Map;
 
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+
 import com.kadrez.cuidadosnaturales.Models.Alert;
+
 import java.util.List;
 import java.util.ArrayList;
 
@@ -55,16 +56,15 @@ public class AlertListActivity extends AppCompatActivity {
     private Button backBtn, getBtn;
     ProgressBar progressBar;
 
-    private List<Alert> alerts ;
-    private RecyclerView recyclerView ;
+    private List<Alert> alerts;
+    private RecyclerView recyclerView;
     UtilService utilService;
-    SharedPreferenceClass sharedPreferenceClass;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_alert_list);
-        alerts = new ArrayList<>() ;
+        alerts = new ArrayList<>();
         recyclerView = findViewById(R.id.listRecyclerView);
         getBtn = findViewById(R.id.getBtn);
 
@@ -74,8 +74,6 @@ public class AlertListActivity extends AppCompatActivity {
                 getAlerts(view);
             }
         });
-
-
 
 
         backBtn = findViewById(R.id.backBtn);
@@ -91,7 +89,6 @@ public class AlertListActivity extends AppCompatActivity {
         progressBar = findViewById(R.id.progress_bar);
         utilService = new UtilService();
 
-        sharedPreferenceClass = new SharedPreferenceClass(this);
 
 
     }
@@ -106,47 +103,45 @@ public class AlertListActivity extends AppCompatActivity {
                 apiKey, null, new Response.Listener<JSONArray>() {
 
 
-                @Override
-                public void onResponse(JSONArray response) {
+            @Override
+            public void onResponse(JSONArray response) {
                 // display response
-                    try {
+                try {
 
-                        for(int i = 0; i < response.length(); i++){
+                    for (int i = 0; i < response.length(); i++) {
 
-                            SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'");
-                            try {
-                                Alert alert = new Alert();
-                                alert.setName(response.getJSONObject(i).getString("plant"));
-                                alert.setAlertType(response.getJSONObject(i).getString("type"));
-                                String dtStart = response.getJSONObject(i).getString("date");
-                                System.out.println("dtStart: "+dtStart);
-                                Date date = format.parse(dtStart);
-                                System.out.println("date: "+date);
-                                alert.setDate(date);
-                                alert.setImage_url(response.getJSONObject(i).getString("img_url"));
-                                alerts.add(alert);
-                            } catch (ParseException e) {
-                                e.printStackTrace();
-                            }
+                        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'");
+                        try {
+                            Alert alert = new Alert();
+                            alert.setName(response.getJSONObject(i).getString("plant"));
+                            alert.setAlertType(response.getJSONObject(i).getString("type"));
+                            String dtStart = response.getJSONObject(i).getString("date");
+                            System.out.println("dtStart: " + dtStart);
+                            Date date = format.parse(dtStart);
+                            System.out.println("date: " + date);
+                            alert.setDate(date);
+                            alert.setImage_url(response.getJSONObject(i).getString("img_url"));
+                            alerts.add(alert);
+                        } catch (ParseException e) {
+                            e.printStackTrace();
                         }
-
-
-
-                    } catch (JSONException e) {
-                        e.printStackTrace();
                     }
-                    Log.d("Response", response.toString());
-                    setuprecyclerview(alerts);
-                    progressBar.setVisibility(View.GONE);
+
+
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+                Log.d("Response", response.toString());
+                setuprecyclerview(alerts);
+                progressBar.setVisibility(View.GONE);
             }
-            },
-                    new Response.ErrorListener()
-            {
-                @Override
-                public void onErrorResponse(VolleyError error) {
-                Log.d("Error.Response", error.toString());
-            }
-            }) {
+        },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        Log.d("Error.Response", error.toString());
+                    }
+                }) {
 
         };
 
@@ -161,14 +156,14 @@ public class AlertListActivity extends AppCompatActivity {
         requestQueue.add(jsonArrayRequest);
     }
 
-        private void setuprecyclerview(List<Alert> alerts) {
+    private void setuprecyclerview(List<Alert> alerts) {
 
 
-            RecyclerViewAdapter myadapter = new RecyclerViewAdapter(this,alerts) ;
-            recyclerView.setLayoutManager(new LinearLayoutManager(this));
-            recyclerView.setAdapter(myadapter);
+        RecyclerViewAdapter myadapter = new RecyclerViewAdapter(this, alerts);
+        recyclerView.setLayoutManager(new LinearLayoutManager(this));
+        recyclerView.setAdapter(myadapter);
 
-        }
+    }
 
 
 }

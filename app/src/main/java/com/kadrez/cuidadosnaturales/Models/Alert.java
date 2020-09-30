@@ -5,7 +5,7 @@ import java.util.Date;
 
 public class Alert {
 
-    private String plantName ;
+    private String plantName;
     private String alertType;
     private Date date;
     private String image_url;
