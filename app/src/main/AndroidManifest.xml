@@ -13,6 +13,13 @@
         android:theme="@style/AppTheme">
         <activity android:name=".AlertListActivity"></activity>
         <activity android:name=".AlertsActivity" />
+        <activity android:name=".EncyclopediaListActivity" />
+        <activity android:name=".InfosActivity" />
+        <activity android:name=".ManageAlertsActivity" />
+        <activity android:name=".ManageEncyclopediaActivity" />
+        <activity android:name=".ManagePlantsActivity" />
+        <activity android:name=".PlantListActivity" />
+        <activity android:name=".PlantsActivity" />
         <activity android:name=".MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

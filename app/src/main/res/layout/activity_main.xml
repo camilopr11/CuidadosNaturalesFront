@@ -39,10 +39,34 @@
             <Button
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Alerts list"
+                android:text="My Garden"
                 android:textAllCaps="false"
                 android:textSize="18sp"
-                android:id="@+id/listBtn"
+                android:id="@+id/gardenBtn"
+                android:layout_marginTop="30dp"
+                android:textColor="#fff"
+                android:background="@drawable/btn_bg"
+                />
+
+            <Button
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Encyclopedia"
+                android:textAllCaps="false"
+                android:textSize="18sp"
+                android:id="@+id/encyclopediaBtn"
+                android:layout_marginTop="30dp"
+                android:textColor="#fff"
+                android:background="@drawable/btn_bg"
+                />
+
+            <Button
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Alerts"
+                android:textAllCaps="false"
+                android:textSize="18sp"
+                android:id="@+id/alertsBtn"
                 android:layout_marginTop="30dp"
                 android:textColor="#fff"
                 android:background="@drawable/btn_bg"
@@ -57,12 +81,12 @@
             <Button
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Create an alert"
+                android:text="Exit"
                 android:textSize="18sp"
                 android:textAllCaps="false"
                 android:background="@drawable/input_field"
                 android:textColor="#ffffff"
-                android:id="@+id/createBtn"
+                android:id="@+id/exitBtn"
                 />
         </LinearLayout>
 

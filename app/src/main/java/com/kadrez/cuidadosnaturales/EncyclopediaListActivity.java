@@ -1,12 +1,14 @@
 package com.kadrez.cuidadosnaturales;
 
-import androidx.appcompat.app.AppCompatActivity;
-
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ProgressBar;
+
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.android.volley.DefaultRetryPolicy;
 import com.android.volley.Request;
@@ -17,46 +19,38 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonArrayRequest;
 import com.android.volley.toolbox.Volley;
 import com.kadrez.cuidadosnaturales.Adapters.RecyclerViewAlertsAdapter;
+import com.kadrez.cuidadosnaturales.Adapters.RecyclerViewInfoAdapter;
+import com.kadrez.cuidadosnaturales.Models.Info;
 import com.kadrez.cuidadosnaturales.UtilsService.UtilService;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.Date;
-
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
-
-import com.kadrez.cuidadosnaturales.Models.Alert;
-
-import java.util.List;
 import java.util.ArrayList;
+import java.util.List;
 
-public class AlertListActivity extends AppCompatActivity {
-    private Button backBtn, getBtn;
+public class EncyclopediaListActivity extends AppCompatActivity {
+    private Button getBtn;
     ProgressBar progressBar;
 
-    private List<Alert> alerts;
+    private List<Info> infos;
     private RecyclerView recyclerView;
     UtilService utilService;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_alert_list);
-        alerts = new ArrayList<>();
+        setContentView(R.layout.activity_encyclopedia_list);
+        infos = new ArrayList<>();
         recyclerView = findViewById(R.id.listRecyclerView);
         getBtn = findViewById(R.id.getBtn);
 
         getBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                listAlerts(view);
+                listInfo(view);
             }
         });
-
 
 
 
@@ -67,11 +61,11 @@ public class AlertListActivity extends AppCompatActivity {
 
     }
 
-    private void listAlerts(View view) {
+    private void listInfo(View view) {
         progressBar.setVisibility(View.VISIBLE);
 
 
-        String apiKey = "https://cuidadosnaturales.herokuapp.com/listAlerts";
+        String apiKey = "https://cuidadosnaturales.herokuapp.com/enciclopedia/listInfo";
 
         JsonArrayRequest jsonArrayRequest = new JsonArrayRequest(Request.Method.GET,
                 apiKey, null, new Response.Listener<JSONArray>() {
@@ -83,22 +77,12 @@ public class AlertListActivity extends AppCompatActivity {
                 try {
 
                     for (int i = 0; i < response.length(); i++) {
-
-                        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'");
-                        try {
-                            Alert alert = new Alert();
-                            alert.setName(response.getJSONObject(i).getString("plant"));
-                            alert.setAlertType(response.getJSONObject(i).getString("type"));
-                            String dtStart = response.getJSONObject(i).getString("date");
-                            System.out.println("dtStart: " + dtStart);
-                            Date date = format.parse(dtStart);
-                            System.out.println("date: " + date);
-                            alert.setDate(date);
-                            alert.setImage_url(response.getJSONObject(i).getString("img_url"));
-                            alerts.add(alert);
-                        } catch (ParseException e) {
-                            e.printStackTrace();
-                        }
+                            Info info = new Info();
+                            info.setTitle(response.getJSONObject(i).getString("title"));
+                            info.setDescription(response.getJSONObject(i).getString("description"));
+                            info.setContent(response.getJSONObject(i).getString("content"));
+                            info.setCategory(response.getJSONObject(i).getString("category"));
+                            infos.add(info);
                     }
 
 
@@ -106,7 +90,7 @@ public class AlertListActivity extends AppCompatActivity {
                     e.printStackTrace();
                 }
                 Log.d("Response", response.toString());
-                setuprecyclerview(alerts);
+                setuprecyclerview(infos);
                 progressBar.setVisibility(View.GONE);
             }
         },
@@ -130,10 +114,10 @@ public class AlertListActivity extends AppCompatActivity {
         requestQueue.add(jsonArrayRequest);
     }
 
-    private void setuprecyclerview(List<Alert> alerts) {
+    private void setuprecyclerview(List<Info> infos) {
 
 
-        RecyclerViewAlertsAdapter myadapter = new RecyclerViewAlertsAdapter(this, alerts);
+        RecyclerViewInfoAdapter myadapter = new RecyclerViewInfoAdapter(this, infos);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         recyclerView.setAdapter(myadapter);
 

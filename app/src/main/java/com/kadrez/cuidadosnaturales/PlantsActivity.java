@@ -41,101 +41,59 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
-public class AlertsActivity extends AppCompatActivity {
-    private Button createBtn;
-    private EditText name_ET, date_ET, img_ET;
-    private Spinner type_SP;
+public class PlantsActivity extends AppCompatActivity {
+    private Button addBtn;
+    private EditText name_ET, type_ET, scName_ET, order_ET, img_ET;
     ProgressBar progressBar;
 
-    private String name, type, dateStr, img;
-    private Date date;
+    private String name, type, scientific_name, order, img;
     UtilService utilService;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_create_alerts);
+        setContentView(R.layout.activity_create_plants);
 
 
         name_ET = findViewById(R.id.name_ET);
-        type_SP = findViewById(R.id.type_SP);
-        date_ET = findViewById(R.id.date_ET);
+        type_ET = findViewById(R.id.type_ET);
+        scName_ET = findViewById(R.id.scName_ET);
+        order_ET = findViewById(R.id.order_ET);
         img_ET = findViewById(R.id.img_ET);
         progressBar = findViewById(R.id.progress_bar);
-        createBtn = findViewById(R.id.createBtn);
+        addBtn = findViewById(R.id.addBtn);
         utilService = new UtilService();
 
 
-        date_ET.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                utilService.hideKeyboard(v, AlertsActivity.this);
-                showDateTimeDialog(date_ET);
-            }
-        });
 
-        createBtn.setOnClickListener(new View.OnClickListener() {
+        addBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                utilService.hideKeyboard(view, AlertsActivity.this);
+                utilService.hideKeyboard(view, PlantsActivity.this);
                 name = name_ET.getText().toString();
-                type = type_SP.getSelectedItem().toString();
-                dateStr = date_ET.getText().toString();
-                SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'");
-                try {
-                    date = format.parse(dateStr);
-                    System.out.println(date);
-                } catch (ParseException e) {
-                    e.printStackTrace();
-                }
+                type = type_ET.getText().toString();
+                scientific_name = scName_ET.getText().toString();
+                order = order_ET.getText().toString();
                 img = img_ET.getText().toString();
                 if (validate(view)) {
-                    createAlert(view);
+                    createPlant(view);
                 }
             }
         });
     }
 
-    private void showDateTimeDialog(final EditText date_time_in) {
-        final Calendar calendar = Calendar.getInstance();
-        DatePickerDialog.OnDateSetListener dateSetListener = new DatePickerDialog.OnDateSetListener() {
-            @Override
-            public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
-                calendar.set(Calendar.YEAR, year);
-                calendar.set(Calendar.MONTH, month);
-                calendar.set(Calendar.DAY_OF_MONTH, dayOfMonth);
 
-                TimePickerDialog.OnTimeSetListener timeSetListener = new TimePickerDialog.OnTimeSetListener() {
-                    @Override
-                    public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
-                        calendar.set(Calendar.HOUR_OF_DAY, hourOfDay);
-                        calendar.set(Calendar.MINUTE, minute);
-
-                        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'");
-
-                        date_time_in.setText(simpleDateFormat.format(calendar.getTime()));
-                    }
-                };
-
-                new TimePickerDialog(AlertsActivity.this, timeSetListener, calendar.get(Calendar.HOUR_OF_DAY), calendar.get(Calendar.MINUTE), false).show();
-            }
-        };
-
-        new DatePickerDialog(AlertsActivity.this, dateSetListener, calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH), calendar.get(Calendar.DAY_OF_MONTH)).show();
-
-    }
-
-
-    private void createAlert(View view) {
+    private void createPlant(View view) {
         progressBar.setVisibility(View.VISIBLE);
 
         final HashMap<String, String> params = new HashMap<>();
-        params.put("plant", name);
+        params.put("name", name);
         params.put("type", type);
-        params.put("date", date.toString());
+        params.put("scientific_name", scientific_name);
+        params.put("order", order);
         params.put("img_url", img);
 
-        String apiKey = "https://cuidadosnaturales.herokuapp.com/createAlert";
+        String apiKey = "https://cuidadosnaturales.herokuapp.com/createPlants";
 
         JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.POST,
                 apiKey, new JSONObject(params), new Response.Listener<JSONObject>() {
@@ -143,8 +101,8 @@ public class AlertsActivity extends AppCompatActivity {
             public void onResponse(JSONObject response) {
                 try {
                     if (response.getBoolean("success")) {
-                        Toast.makeText(AlertsActivity.this, "Alert added successfully", Toast.LENGTH_SHORT).show();
-                        startActivity(new Intent(AlertsActivity.this, ManageAlertsActivity.class));
+                        Toast.makeText(PlantsActivity.this, "Plant added successfully", Toast.LENGTH_SHORT).show();
+                        startActivity(new Intent(PlantsActivity.this, ManagePlantsActivity.class));
                         progressBar.setVisibility(View.GONE);
                     }
                 } catch (JSONException e) {
@@ -161,7 +119,7 @@ public class AlertsActivity extends AppCompatActivity {
                         String res = new String(response.data, HttpHeaderParser.parseCharset(response.headers, "utf-8"));
 
                         JSONObject obj = new JSONObject(res);
-                        Toast.makeText(AlertsActivity.this, obj.getString("msg"), Toast.LENGTH_SHORT).show();
+                        Toast.makeText(PlantsActivity.this, obj.getString("msg"), Toast.LENGTH_SHORT).show();
                         progressBar.setVisibility(View.GONE);
                     } catch (JSONException | UnsupportedEncodingException je) {
                         je.printStackTrace();
@@ -194,16 +152,22 @@ public class AlertsActivity extends AppCompatActivity {
         boolean isValid;
 
         if (!TextUtils.isEmpty(name)) {
-            if (!TextUtils.equals(type, "Select alert type")) {
-                if (!TextUtils.isEmpty(dateStr)) {
-                    if (!TextUtils.isEmpty(img)) {
-                        isValid = true;
-                    } else {
-                        utilService.showSnackBar(view, "please enter image url....");
+            if (!TextUtils.isEmpty(type)) {
+                if (!TextUtils.isEmpty(scientific_name)) {
+                    if (!TextUtils.isEmpty(order)) {
+                        if (!TextUtils.isEmpty(img)) {
+                            isValid = true;
+                        } else {
+                            utilService.showSnackBar(view, "please enter image url....");
+                            isValid = false;
+                    }
+
+                }else {
+                        utilService.showSnackBar(view, "please enter order....");
                         isValid = false;
                     }
-                } else {
-                    utilService.showSnackBar(view, "please enter date....");
+                }else {
+                    utilService.showSnackBar(view, "please enter scientific name....");
                     isValid = false;
                 }
             } else {

@@ -1,16 +1,19 @@
 package com.kadrez.cuidadosnaturales;
 
-import androidx.appcompat.app.AppCompatActivity;
-
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 
+import androidx.appcompat.app.AppCompatActivity;
+
 
 public class MainActivity extends AppCompatActivity {
-    private Button createBtn;
-    private Button listBtn;
+    private Button gardenBtn;
+    private Button encyclopediaBtn;
+    private Button alertsBtn;
+    private Button exitBtn;
+
 
 
     @Override
@@ -18,23 +21,42 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        createBtn = findViewById(R.id.createBtn);
+        gardenBtn = findViewById(R.id.gardenBtn);
+        encyclopediaBtn = findViewById(R.id.encyclopediaBtn);
+        alertsBtn = findViewById(R.id.alertsBtn);
+        exitBtn = findViewById(R.id.exitBtn);
 
-        createBtn.setOnClickListener(new View.OnClickListener() {
+        gardenBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(MainActivity.this, AlertsActivity.class);
+                Intent intent = new Intent(MainActivity.this, ManagePlantsActivity.class);
                 startActivity(intent);
             }
         });
 
-        listBtn = findViewById(R.id.listBtn);
 
-        listBtn.setOnClickListener(new View.OnClickListener() {
+        encyclopediaBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent2 = new Intent(MainActivity.this, AlertListActivity.class);
+                Intent intent2 = new Intent(MainActivity.this, ManageEncyclopediaActivity.class);
                 startActivity(intent2);
+            }
+        });
+
+        alertsBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent3 = new Intent(MainActivity.this, ManageAlertsActivity.class);
+                startActivity(intent3);
+            }
+        });
+
+        exitBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                finish();
+                System.exit(0);
+
             }
         });
     }

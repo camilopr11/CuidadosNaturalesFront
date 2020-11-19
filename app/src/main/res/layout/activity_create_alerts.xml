@@ -89,6 +89,12 @@
                 android:textColor="#ffffff"
                 android:textColorHint="#D3CFCF" />
 
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="2dp"
+                android:layout_margin="25dp"
+                android:background="@color/shade_black" />
+
             <Button
                 android:id="@+id/createBtn"
                 android:layout_width="match_parent"
@@ -100,21 +106,8 @@
                 android:textColor="#fff"
                 android:textSize="18sp" />
 
-            <View
-                android:layout_width="match_parent"
-                android:layout_height="1dp"
-                android:layout_margin="50dp"
-                android:background="@color/shade_black" />
 
-            <Button
-                android:id="@+id/listBtn"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:background="@drawable/input_field"
-                android:text="See alert list"
-                android:textAllCaps="false"
-                android:textColor="#ffffff"
-                android:textSize="18sp" />
+
         </LinearLayout>
 
     </LinearLayout>
